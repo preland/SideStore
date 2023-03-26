@@ -253,6 +253,11 @@ private extension SettingsViewController
     {
         func signOut()
         {
+            if Keychain.shared.adiPb != nil {
+                Keychain.shared.adiPb = nil
+                print("Cleared adi.pb from keychain")
+            }
+            
             DatabaseManager.shared.signOut { (error) in
                 DispatchQueue.main.async {
                     if let error = error

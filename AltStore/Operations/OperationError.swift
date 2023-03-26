@@ -50,6 +50,10 @@ enum OperationError: LocalizedError
     case invalidPairingFile(details: String)
     case swiftBridgeIssue
     
+    case invalidAnisette
+    case provisioningError
+    case anisetteError
+    
     var failureReason: String? {
         switch self {
         case .unknown: return NSLocalizedString("An unknown error occured.", comment: "")
@@ -80,6 +84,9 @@ enum OperationError: LocalizedError
         case .noConnection: return NSLocalizedString("Unable to connect to the device, make sure Wireguard is enabled and you're connected to WiFi", comment: "")
         case .invalidPairingFile(let details): return String(format: NSLocalizedString("Invalid pairing file. %@", comment: ""), details)
         case .swiftBridgeIssue: return NSLocalizedString("There was an issue giving bytes to Rust. PLEASE REPORT THIS TO GITHUB ISSUES!", comment: "")
+        case .invalidAnisette: return NSLocalizedString("Anisette server returned invalid data. Try using another anisette server.", comment: "")
+        case .provisioningError: return NSLocalizedString("An error occurred when provisioning. Please try again. If the issue persists, report it on GitHub Issues!", comment: "")
+        case .anisetteError: return NSLocalizedString("An error occurred when getting anisette data. Please try again. If the issue persists, report it on GitHub Issues!", comment: "")
         }
     }
     
