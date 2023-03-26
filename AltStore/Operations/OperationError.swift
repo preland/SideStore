@@ -8,6 +8,7 @@
 
 import Foundation
 import AltSign
+import minimuxer
 
 enum OperationError: LocalizedError
 {
@@ -42,9 +43,12 @@ enum OperationError: LocalizedError
     case uninstall
     case lookupApps
     case detach
+    case attach
     case functionArguments
-    case profileInstall
+    case profileManage
     case noConnection
+    case invalidPairingFile(details: String)
+    case swiftBridgeIssue
     
     var failureReason: String? {
         switch self {
@@ -70,9 +74,12 @@ enum OperationError: LocalizedError
         case .uninstall: return NSLocalizedString("Unable to uninstall the app", comment: "")
         case .lookupApps: return NSLocalizedString("Unable to fetch apps from the device", comment: "")
         case .detach: return NSLocalizedString("Unable to detach from the app's process", comment: "")
+        case .attach: return NSLocalizedString("Unable to attach to the app's process", comment: "")
         case .functionArguments: return NSLocalizedString("A function was passed invalid arguments", comment: "")
-        case .profileInstall: return NSLocalizedString("Unable to manage profiles on the device", comment: "")
+        case .profileManage: return NSLocalizedString("Unable to manage profiles on the device", comment: "")
         case .noConnection: return NSLocalizedString("Unable to connect to the device, make sure Wireguard is enabled and you're connected to WiFi", comment: "")
+        case .invalidPairingFile(let details): return String(format: NSLocalizedString("Invalid pairing file. %@", comment: ""), details)
+        case .swiftBridgeIssue: return NSLocalizedString("There was an issue giving bytes to Rust. PLEASE REPORT THIS TO GITHUB ISSUES!", comment: "")
         }
     }
     
@@ -118,49 +125,55 @@ enum OperationError: LocalizedError
     }
 }
 
-func minimuxer_to_operation(code: Int32) -> OperationError {
-    switch code {
-    case 1:
-        return OperationError.noDevice
-    case 2:
-        return OperationError.createService(name: "debug")
-    case 3:
-        return OperationError.createService(name: "instproxy")
-    case 4:
-        return OperationError.getFromDevice(name: "installed apps")
-    case 5:
-        return OperationError.getFromDevice(name: "path to the app")
-    case 6:
-        return OperationError.getFromDevice(name: "bundle path")
-    case 7:
-        return OperationError.setArgument(name: "max packet")
-    case 8:
-        return OperationError.setArgument(name: "working directory")
-    case 9:
-        return OperationError.setArgument(name: "argv")
-    case 10:
-        return OperationError.getFromDevice(name: "launch success")
-    case 11:
-        return OperationError.detach
-    case 12:
-        return OperationError.functionArguments
-    case 13:
-        return OperationError.createService(name: "AFC")
-    case 14:
-        return OperationError.afc
-    case 15:
-        return OperationError.install
-    case 16:
-        return OperationError.uninstall
-    case 17:
-        return OperationError.createService(name: "misagent")
-    case 18:
-        return OperationError.profileInstall
-    case 19:
-        return OperationError.profileInstall
-    case 20:
-        return OperationError.noConnection
-    default:
-        return OperationError.unknown
+func minimuxerToOperationError(_ error: Error) -> OperationError {
+    if let error = error as? Errors {
+        switch error {
+        case .NoDevice:
+            return OperationError.noDevice
+        case .NoConnection:
+            return OperationError.noConnection
+        case .PairingFile:
+            return OperationError.invalidPairingFile(details: "Your pairing file either didn't have a UDID, or it wasn't a valid plist. Please use jitterbugpair to generate it")
+        case .UDIDMismatch:
+            return OperationError.invalidPairingFile(details: "Your pairing file's UDID didn't match up with your device. Please regenerate the pairing file, and ensure you generate it for the correct device")
+        case .CreateDebug:
+            return OperationError.createService(name: "debug")
+        case .CreateInstproxy:
+            return OperationError.createService(name: "instproxy")
+        case .LookupApps:
+            return OperationError.getFromDevice(name: "installed apps")
+        case .FindApp:
+            return OperationError.getFromDevice(name: "path to the app")
+        case .BundlePath:
+            return OperationError.getFromDevice(name: "bundle path")
+        case .MaxPacket:
+            return OperationError.setArgument(name: "max packet")
+        case .WorkingDirectory:
+            return OperationError.setArgument(name: "working directory")
+        case .Argv:
+            return OperationError.setArgument(name: "argv")
+        case .LaunchSuccess:
+            return OperationError.getFromDevice(name: "launch success")
+        case .Detach:
+            return OperationError.detach
+        case .Attach:
+            return OperationError.attach
+        case .CreateAfc:
+            return OperationError.createService(name: "AFC")
+        case .RwAfc:
+            return OperationError.afc
+        case .InstallApp:
+            return OperationError.install
+        case .UninstallApp:
+            return OperationError.uninstall
+        case .CreateMisagent:
+            return OperationError.createService(name: "misagent")
+        case .ProfileInstall:
+            return OperationError.profileManage
+        case .ProfileRemove:
+            return OperationError.profileManage
+        }
     }
+    print("\n\nERROR GIVEN TO minimuxerToOperationError IS NOT AN Errors!!!!!!!!!!!!!!!!!! \(error)\n\n")
+    return OperationError.unknown
 }

@@ -48,16 +48,18 @@ final class RefreshAppOperation: ResultOperation<InstalledApp>
                 print("Sending refresh app request...")
 
                 for p in profiles {
-                    do {
-                        let x = try install_provisioning_profile(plist: p.value.data)
-                        if case .Bad(let code) = x {
-                            self.finish(.failure(minimuxer_to_operation(code: code)))
-                        }
-                    } catch Uhoh.Bad(let code) {
-                        self.finish(.failure(minimuxer_to_operation(code: code)))
-                    } catch {
-                        self.finish(.failure(OperationError.unknown))
+                    let bytes = dataToBytes(p.value.data)
+                    if bytes == nil {
+                        return self.finish(.failure(OperationError.swiftBridgeIssue))
                     }
+                    do {
+                        try install_provisioning_profile(UnsafeBufferPointer(bytes!))
+                        bytes!.deallocate()
+                    } catch {
+                        bytes!.deallocate()
+                        return self.finish(.failure(minimuxerToOperationError(error)))
+                    }
+                    
                     self.progress.completedUnitCount += 1
                     
                     let predicate = NSPredicate(format: "%K == %@", #keyPath(InstalledApp.bundleIdentifier), app.bundleIdentifier)

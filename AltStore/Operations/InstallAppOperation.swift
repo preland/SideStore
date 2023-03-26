@@ -11,6 +11,7 @@ import Network
 import AltStoreCore
 import AltSign
 import Roxas
+import minimuxer
 
 @objc(InstallAppOperation)
 final class InstallAppOperation: ResultOperation<InstalledApp>
@@ -148,17 +149,14 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                 })
             }
             
-            let ns_bundle = NSString(string: installedApp.bundleIdentifier)
-            let ns_bundle_ptr = UnsafeMutablePointer<CChar>(mutating: ns_bundle.utf8String)
-            
-            let res = minimuxer_install_ipa(ns_bundle_ptr)
-            if res == 0 {
-                installedApp.refreshedDate = Date()
-                self.finish(.success(installedApp))
-
-            } else {
-                self.finish(.failure(minimuxer_to_operation(code: res)))
+            do {
+                try install_ipa(installedApp.bundleIdentifier)
+            } catch {
+                return self.finish(.failure(minimuxerToOperationError(error)))
             }
+            
+            installedApp.refreshedDate = Date()
+            self.finish(.success(installedApp))
         }
     }
     
@@ -174,10 +172,11 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
             do
             {
                 try FileManager.default.removeItem(at: fileURL)
+                print("Removed refreshed IPA")
             }
             catch
             {
-                print("Failed to remove refreshed .ipa:", error)
+                print("Failed to remove refreshed .ipa: \(error)")
             }
         }
         

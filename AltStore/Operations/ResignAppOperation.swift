@@ -61,6 +61,7 @@ final class ResignAppOperation: ResultOperation<ALTApplication>
                 {
                     let destinationURL = InstalledApp.refreshedIPAURL(for: app)
                     try FileManager.default.copyItem(at: resignedURL, to: destinationURL, shouldReplace: true)
+                    print("Successfully resigned app to \(destinationURL.absoluteString)")
                     
                     // Use appBundleURL since we need an app bundle, not .ipa.
                     guard let resignedApplication = ALTApplication(fileURL: appBundleURL) else { throw OperationError.invalidApp }
