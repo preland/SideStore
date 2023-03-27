@@ -54,6 +54,7 @@ extension SettingsViewController
         case refreshAttempts
         case errorLog
         case resetPairingFile
+        case resetAdiPb
         case advancedSettings
     }
 }
@@ -253,11 +254,6 @@ private extension SettingsViewController
     {
         func signOut()
         {
-            if Keychain.shared.adiPb != nil {
-                Keychain.shared.adiPb = nil
-                print("Cleared adi.pb from keychain")
-            }
-            
             DatabaseManager.shared.signOut { (error) in
                 DispatchQueue.main.async {
                     if let error = error
@@ -528,6 +524,25 @@ extension SettingsViewController
                     self.tableView.deselectRow(at: indexPath, animated: true)
                     let dialogMessage = UIAlertController(title: NSLocalizedString("Pairing File Reseted", comment: ""), message: NSLocalizedString("Please restart SideStore", comment: ""), preferredStyle: .alert)
                     self.present(dialogMessage, animated: true, completion: nil)
+                })
+                alertController.addAction(.cancel)
+                //Fix crash on iPad
+                alertController.popoverPresentationController?.sourceView = self.tableView
+                alertController.popoverPresentationController?.sourceRect = self.tableView.rectForRow(at: indexPath)
+                self.present(alertController, animated: true)
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            case .resetAdiPb:
+                let alertController = UIAlertController(
+                    title: NSLocalizedString("Are you sure you want to reset the adi.pb file?", comment: ""),
+                    message: NSLocalizedString("The adi.pb file is used to generate anisette data, which is required to log into an Apple ID. If you are having issues with account related things, you can try this. However, you will be required to do 2FA again. This will do nothing if you are using an older anisette server.", comment: ""),
+                    preferredStyle: UIAlertController.Style.actionSheet)
+                
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("Reset adi.pb", comment: ""), style: .destructive){ _ in
+                    if Keychain.shared.adiPb != nil {
+                        Keychain.shared.adiPb = nil
+                        print("Cleared adi.pb from keychain")
+                    }
+                    self.tableView.deselectRow(at: indexPath, animated: true)
                 })
                 alertController.addAction(.cancel)
                 //Fix crash on iPad
