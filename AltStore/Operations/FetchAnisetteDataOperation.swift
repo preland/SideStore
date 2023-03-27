@@ -131,7 +131,15 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
         }.resume()
     }
     
-    func provision() {
+    func fetchClientInfo(_ callback: @escaping () -> Void) {
+        if  self.clientInfo != nil &&
+            self.userAgent != nil &&
+            self.mdLu != nil &&
+            self.deviceId != nil &&
+            Keychain.shared.identifier != nil {
+            print("Skipping client_info fetch since all the properties we need aren't nil")
+            return callback()
+        }
         print("Trying to get client_info")
         let clientInfoURL = self.url!.appendingPathComponent("v3").appendingPathComponent("client_info")
         URLSession.shared.dataTask(with: clientInfoURL) { data, response, error in
@@ -167,18 +175,7 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
                         self.deviceId = uuid.uuidString.uppercased()
                         print("X-Mme-Device-Id: \(self.deviceId!)")
                         
-                        print("Getting provisioning URLs")
-                        var request = self.buildAppleRequest(url: URL(string: "https://gsa.apple.com/grandslam/GsService2/lookup")!)
-                        request.httpMethod = "GET"
-                        URLSession.shared.dataTask(with: request) { data, response, error in
-                            let plist = try! PropertyListSerialization.propertyList(from: data!, format: nil) as! Dictionary<String, Dictionary<String, Any>>
-                            self.startProvisioningURL = URL(string: plist["urls"]!["midStartProvisioning"] as! String)!
-                            self.endProvisioningURL = URL(string: plist["urls"]!["midFinishProvisioning"] as! String)!
-                            print("startProvisioningURL: \(self.startProvisioningURL!.absoluteString)")
-                            print("endProvisioningURL: \(self.endProvisioningURL!.absoluteString)")
-                            print("Starting a provisioning session")
-                            self.startProvisioningSession()
-                        }.resume()
+                        callback()
                     } else { self.handleV1() }
                 } else { self.handleV1() }
             } catch let error as NSError {
@@ -186,6 +183,23 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
                 self.finish(.failure(OperationError.anisetteError)) // always show the user anisetteError so they know what it was caused by
             }
         }.resume()
+    }
+    
+    func provision() {
+        fetchClientInfo {
+            print("Getting provisioning URLs")
+            var request = self.buildAppleRequest(url: URL(string: "https://gsa.apple.com/grandslam/GsService2/lookup")!)
+            request.httpMethod = "GET"
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                let plist = try! PropertyListSerialization.propertyList(from: data!, format: nil) as! Dictionary<String, Dictionary<String, Any>>
+                self.startProvisioningURL = URL(string: plist["urls"]!["midStartProvisioning"] as! String)!
+                self.endProvisioningURL = URL(string: plist["urls"]!["midFinishProvisioning"] as! String)!
+                print("startProvisioningURL: \(self.startProvisioningURL!.absoluteString)")
+                print("endProvisioningURL: \(self.endProvisioningURL!.absoluteString)")
+                print("Starting a provisioning session")
+                self.startProvisioningSession()
+            }.resume()
+        }
     }
     
     func startProvisioningSession() {
@@ -286,67 +300,69 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
     }
     
     func fetchAnisetteV3(_ identifier: String, _ adiPb: String) {
-        print("Fetching anisette V3")
-        var request = URLRequest(url: self.url!.appendingPathComponent("v3").appendingPathComponent("get_headers"))
-        request.httpMethod = "POST"
-        request.httpBody = try! JSONSerialization.data(withJSONObject: [
-            "identifier": identifier,
-            "adi_pb": adiPb
-        ], options: [])
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            do {
-                guard let data = data, error == nil else { throw OperationError.anisetteError }
-                
-                // make sure this JSON is in the format we expect
-                // convert data to json
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
-                    if json["result"] == "GetHeadersError" {
-                        print("Error getting V3 headers: \(json["message"]!)")
-                        throw OperationError.anisetteError
+        fetchClientInfo {
+            print("Fetching anisette V3")
+            var request = URLRequest(url: self.url!.appendingPathComponent("v3").appendingPathComponent("get_headers"))
+            request.httpMethod = "POST"
+            request.httpBody = try! JSONSerialization.data(withJSONObject: [
+                "identifier": identifier,
+                "adi_pb": adiPb
+            ], options: [])
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                do {
+                    guard let data = data, error == nil else { throw OperationError.anisetteError }
+                    
+                    // make sure this JSON is in the format we expect
+                    // convert data to json
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
+                        if json["result"] == "GetHeadersError" {
+                            print("Error getting V3 headers: \(json["message"]!)")
+                            throw OperationError.anisetteError
+                        }
+                        
+                        // try to read out a dictionary
+                        // for some reason serial number isn't needed but it doesn't work unless it has a value
+                        var formattedJSON: [String: String] = ["deviceSerialNumber": "0"]
+                        if let machineID = json["X-Apple-I-MD-M"] { formattedJSON["machineID"] = machineID }
+                        if let oneTimePassword = json["X-Apple-I-MD"] { formattedJSON["oneTimePassword"] = oneTimePassword }
+                        if let routingInfo = json["X-Apple-I-MD-RINFO"] { formattedJSON["routingInfo"] = routingInfo }
+                        formattedJSON["deviceDescription"] = self.clientInfo!
+                        formattedJSON["localUserID"] = self.mdLu!
+                        formattedJSON["deviceUniqueIdentifier"] = self.deviceId!
+                        
+                        // Generate date stuff on client
+                        let formatter = DateFormatter()
+                        formatter.locale = Locale(identifier: "en_US_POSIX")
+                        formatter.calendar = Calendar(identifier: .gregorian)
+                        formatter.timeZone = TimeZone.current
+                        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                        let dateString = formatter.string(from: Date())
+                        formattedJSON["date"] = dateString
+                        formattedJSON["locale"] = Locale.current.identifier
+                        formattedJSON["timeZone"] = TimeZone.current.abbreviation()
+                        
+                        if let response = response as? HTTPURLResponse,
+                           let version = response.value(forHTTPHeaderField: "Implementation-Version") {
+                            print("Implementation-Version: \(version)")
+                        } else { print("No Implementation-Version header") }
+                        
+                        print("Anisette used: \(formattedJSON)")
+                        print("Original JSON: \(json)")
+                        if let anisette = ALTAnisetteData(json: formattedJSON) {
+                            print("Anisette is valid!")
+                            self.finish(.success(anisette))
+                        } else {
+                            print("Anisette is invalid!!!!")
+                            throw OperationError.anisetteError
+                        }
                     }
-                    
-                    // try to read out a dictionary
-                    // for some reason serial number isn't needed but it doesn't work unless it has a value
-                    var formattedJSON: [String: String] = ["deviceSerialNumber": "0"]
-                    if let machineID = json["X-Apple-I-MD-M"] { formattedJSON["machineID"] = machineID }
-                    if let oneTimePassword = json["X-Apple-I-MD"] { formattedJSON["oneTimePassword"] = oneTimePassword }
-                    if let routingInfo = json["X-Apple-I-MD-RINFO"] { formattedJSON["routingInfo"] = routingInfo }
-                    formattedJSON["deviceDescription"] = self.clientInfo!
-                    formattedJSON["localUserID"] = self.mdLu!
-                    formattedJSON["deviceUniqueIdentifier"] = self.deviceId!
-                    
-                    // Generate date stuff on client
-                    let formatter = DateFormatter()
-                    formatter.locale = Locale(identifier: "en_US_POSIX")
-                    formatter.calendar = Calendar(identifier: .gregorian)
-                    formatter.timeZone = TimeZone.current
-                    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-                    let dateString = formatter.string(from: Date())
-                    formattedJSON["date"] = dateString
-                    formattedJSON["locale"] = Locale.current.identifier
-                    formattedJSON["timeZone"] = TimeZone.current.abbreviation()
-                    
-                    if let response = response as? HTTPURLResponse,
-                       let version = response.value(forHTTPHeaderField: "Implementation-Version") {
-                        print("Implementation-Version: \(version)")
-                    } else { print("No Implementation-Version header") }
-                    
-                    print("Anisette used: \(formattedJSON)")
-                    print("Original JSON: \(json)")
-                    if let anisette = ALTAnisetteData(json: formattedJSON) {
-                        print("Anisette is valid!")
-                        self.finish(.success(anisette))
-                    } else {
-                        print("Anisette is invalid!!!!")
-                        throw OperationError.anisetteError
-                    }
+                } catch let error as NSError {
+                    print("Failed to load: \(error.localizedDescription)")
+                    self.finish(.failure(OperationError.anisetteError)) // always show the user anisetteError so they know what it was caused by
                 }
-            } catch let error as NSError {
-                print("Failed to load: \(error.localizedDescription)")
-                self.finish(.failure(OperationError.anisetteError)) // always show the user anisetteError so they know what it was caused by
-            }
-        }.resume()
+            }.resume()
+        }
     }
     
     func buildAppleRequest(url: URL) -> URLRequest {
