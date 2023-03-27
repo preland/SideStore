@@ -372,8 +372,8 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
         request.setValue("text/x-xml-plist", forHTTPHeaderField: "Content-Type")
         request.setValue("*/*", forHTTPHeaderField: "Accept")
 
-        request.setValue(self.mdLu, forHTTPHeaderField: "X-Apple-I-MD-LU")
-        request.setValue(self.deviceId, forHTTPHeaderField: "X-Mme-Device-Id")
+        request.setValue(self.mdLu!, forHTTPHeaderField: "X-Apple-I-MD-LU")
+        request.setValue(self.deviceId!, forHTTPHeaderField: "X-Mme-Device-Id")
 
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
