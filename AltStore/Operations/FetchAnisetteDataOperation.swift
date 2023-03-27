@@ -45,9 +45,7 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
             return
         }
         
-        // if you're using this test build we're gonna force you to use ani.sidestore.io
-        self.url = URL(string: "https://ani.sidestore.io")!
-//        self.url = AnisetteManager.currentURL
+        self.url = AnisetteManager.currentURL
         print("Anisette URL: \(self.url!.absoluteString)")
         
         if let identifier = Keychain.shared.identifier,
