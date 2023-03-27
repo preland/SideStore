@@ -180,7 +180,7 @@ final class FetchAnisetteDataOperation: ResultOperation<ALTAnisetteData>, WebSoc
                 } else { self.handleV1() }
             } catch let error as NSError {
                 print("Failed to load: \(error.localizedDescription)")
-                self.finish(.failure(OperationError.anisetteError)) // always show the user anisetteError so they know what it was caused by
+                self.handleV1()
             }
         }.resume()
     }
