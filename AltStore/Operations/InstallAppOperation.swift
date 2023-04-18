@@ -11,6 +11,7 @@ import Network
 import AltStoreCore
 import AltSign
 import Roxas
+import minimuxer
 
 @objc(InstallAppOperation)
 final class InstallAppOperation: ResultOperation<InstalledApp>
@@ -148,17 +149,35 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                 })
             }
             
-            let ns_bundle = NSString(string: installedApp.bundleIdentifier)
-            let ns_bundle_ptr = UnsafeMutablePointer<CChar>(mutating: ns_bundle.utf8String)
-            
-            let res = minimuxer_install_ipa(ns_bundle_ptr)
-            if res == 0 {
-                installedApp.refreshedDate = Date()
-                self.finish(.success(installedApp))
-
-            } else {
-                self.finish(.failure(minimuxer_to_operation(code: res)))
+            // Since reinstalling ourself will hang until we leave the app, force quit after 3 seconds if still installing
+            var installing = true
+            if installedApp.storeApp?.bundleIdentifier == Bundle.Info.appbundleIdentifier {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    if installing {
+                        print("We are still installing after 3 seconds, requesting notification and then closing")
+                        
+                        var content = UNMutableNotificationContent()
+                        content.title = "Refreshing..."
+                        content.body = "To finish refreshing, SideStore must force close itself. Please reopen SideStore after it is done refreshing!"
+                        let notification = UNNotificationRequest(identifier: Bundle.Info.appbundleIdentifier + ".FinishRefreshNotification", content: content, trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false))
+                        UNUserNotificationCenter.current().add(notification)
+                        exit(0)
+                    } else {
+                        print("Installing finished")
+                    }
+                }
             }
+            
+            do {
+                try install_ipa(installedApp.bundleIdentifier)
+                installing = false
+            } catch {
+                installing = false
+                return self.finish(.failure(error))
+            }
+            
+            installedApp.refreshedDate = Date()
+            self.finish(.success(installedApp))
         }
     }
     
@@ -174,10 +193,11 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
             do
             {
                 try FileManager.default.removeItem(at: fileURL)
+                print("Removed refreshed IPA")
             }
             catch
             {
-                print("Failed to remove refreshed .ipa:", error)
+                print("Failed to remove refreshed .ipa: \(error)")
             }
         }
         
