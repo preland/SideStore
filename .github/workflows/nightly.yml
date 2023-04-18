@@ -1,9 +1,6 @@
 name: Nightly SideStore build
 on:
   push:
-    branches:
-      - develop
-
 jobs:
   build:
     name: Build and upload SideStore Nightly
