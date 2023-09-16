@@ -138,8 +138,8 @@ extension MinimuxerError: LocalizedError {
             return self.createService(name: "AFC")
         case .RwAfc:
             return NSLocalizedString("AFC was unable to manage files on the device", comment: "")
-        case .InstallApp:
-            return NSLocalizedString("Unable to install the app from the staging directory", comment: "")
+        case .InstallApp(let message):
+            return NSLocalizedString("Unable to install the app: \(message)", comment: "")
         case .UninstallApp:
             return NSLocalizedString("Unable to uninstall the app", comment: "")
 

@@ -142,7 +142,7 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                         installedApp.isActive = false
                     }
                 }
-
+                
                 activeProfiles = Set(activeApps.flatMap { (installedApp) -> [String] in
                     let appExtensionProfiles = installedApp.appExtensions.map { $0.resignedBundleIdentifier }
                     return [installedApp.resignedBundleIdentifier] + appExtensionProfiles
@@ -166,7 +166,7 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                         switch (settings.authorizationStatus) {
                         case .authorized, .ephemeral, .provisional:
                             print("Notifications are enabled")
-
+                            
                             let content = UNMutableNotificationContent()
                             content.title = "Refreshing..."
                             content.body = "SideStore will automatically move to the homescreen to finish refreshing!"
@@ -175,13 +175,13 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                             break
                         default:
                             print("Notifications are not enabled")
-
+                            
                             let alert = UIAlertController(title: "Finish Refresh", message: "Please reopen SideStore after the process is finished.To finish refreshing, SideStore must be moved to the background. To do this, you can either go to the Home Screen manually or by hitting Continue. Please reopen SideStore after doing this.", preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: NSLocalizedString("Continue", comment: ""), style: .default, handler: { _ in
                                 print("Going home")
                                 UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
                             }))
-
+                            
                             DispatchQueue.main.async {
                                 let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
                                 if var topController = keyWindow?.rootViewController {
@@ -198,22 +198,15 @@ final class InstallAppOperation: ResultOperation<InstalledApp>
                     UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
                 }
             }
-            var attempts = 10
-            while (attempts != 0){
-                print("Install ipa attempts left: \(attempts)")
-                do {
-                    try install_ipa(installedApp.bundleIdentifier)
-                    installing = false
-                    installedApp.refreshedDate = Date()
-                    self.finish(.success(installedApp))
-                    break
-                } catch {
-                    attempts -= 1
-                    if (attempts <= 0){
-                        installing = false
-                        self.finish(.failure(MinimuxerError.InstallApp))
-                    }
-                }
+            
+            do {
+                try install_ipa(installedApp.bundleIdentifier)
+                installing = false
+                installedApp.refreshedDate = Date()
+                self.finish(.success(installedApp))
+            } catch let error {
+                installing = false
+                self.finish(.failure(error))
             }
         }
     }
