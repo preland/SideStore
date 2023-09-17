@@ -13,7 +13,8 @@ import AltSign
 import SemanticVersion
 
 // Free developer accounts are limited to only 3 active sideloaded apps at a time as of iOS 13.3.1.
-public let ALTActiveAppsLimit = 3
+//preland: but with MDC it can bypass the three app limit. Note that if MDC is not working, the app will not be protected from installation errors resulting from going over the limit.
+public let ALTActiveAppsLimit = 16384
 
 public protocol InstalledAppProtocol: Fetchable
 {
