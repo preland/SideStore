@@ -41,19 +41,11 @@ final class RefreshAppOperation: ResultOperation<InstalledApp>
             guard let app = self.context.app else { return self.finish(.failure(OperationError.appNotFound)) }
             
             for p in profiles {
-                var attempts = 5
-                while (attempts > 0){
-                    print("Install provisioning profile attempts left: \(attempts)")
-                    do {
-                        let bytes = p.value.data.toRustByteSlice()
-                        try install_provisioning_profile(bytes.forRust())
-                        break
-                    } catch {
-                        attempts -= 1
-                        if (attempts <= 0) {
-                            self.finish(.failure(MinimuxerError.ProfileInstall))
-                        }
-                    }
+                do {
+                    let bytes = p.value.data.toRustByteSlice()
+                    try install_provisioning_profile(bytes.forRust())
+                } catch {
+                    self.finish(.failure(MinimuxerError.ProfileInstall))
                 }
 
                 DatabaseManager.shared.persistentContainer.performBackgroundTask { (context) in

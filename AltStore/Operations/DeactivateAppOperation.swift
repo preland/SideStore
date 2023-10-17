@@ -39,21 +39,14 @@ final class DeactivateAppOperation: ResultOperation<InstalledApp>
             let allIdentifiers = [installedApp.resignedBundleIdentifier] + appExtensionProfiles
             
             for profile in allIdentifiers {
-                var attempts = 5
-                while (attempts > 0){
-                    print("Remove Provisioning profile attempts left: \(attempts)")
-                    do {
-                        try remove_provisioning_profile(profile)
-                        self.progress.completedUnitCount += 1
-                        installedApp.isActive = false
-                        self.finish(.success(installedApp))
-                        break
-                    } catch {
-                        attempts -= 1
-                        if (attempts <= 0){
-                            self.finish(.failure(error))
-                        }
-                    }
+                do {
+                    try remove_provisioning_profile(profile)
+                    self.progress.completedUnitCount += 1
+                    installedApp.isActive = false
+                    self.finish(.success(installedApp))
+                    break
+                } catch {
+                    self.finish(.failure(error))
                 }
             }
         }

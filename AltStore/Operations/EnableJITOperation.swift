@@ -50,7 +50,7 @@ final class EnableJITOperation<Context: EnableJITContext>: ResultOperation<Void>
                 do {
                     try debug_app(installedApp.resignedBundleIdentifier)
                     self.finish(.success(()))
-                    break
+                    retries = 0
                 } catch {
                     retries -= 1
                     if (retries <= 0){

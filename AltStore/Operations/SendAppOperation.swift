@@ -45,21 +45,13 @@ final class SendAppOperation: ResultOperation<()>
         print("AFC App `fileURL`: \(fileURL.absoluteString)")
         
         if let data = NSData(contentsOf: fileURL) {
-            var attempts = 10
-            while (attempts != 0){
-                print("Send app attempts left: \(attempts)")
-                do {
-                    let bytes = Data(data).toRustByteSlice()
-                    try yeet_app_afc(app.bundleIdentifier, bytes.forRust())
-                    self.progress.completedUnitCount += 1
-                    self.finish(.success(()))
-                    break
-                } catch {
-                    attempts -= 1
-                    if (attempts <= 0) {
-                        self.finish(.failure(MinimuxerError.RwAfc))
-                    }
-                }
+            do {
+                let bytes = Data(data).toRustByteSlice()
+                try yeet_app_afc(app.bundleIdentifier, bytes.forRust())
+                self.progress.completedUnitCount += 1
+                self.finish(.success(()))
+            } catch {
+                self.finish(.failure(MinimuxerError.RwAfc))
                 self.progress.completedUnitCount += 1
                 self.finish(.success(()))
             }
