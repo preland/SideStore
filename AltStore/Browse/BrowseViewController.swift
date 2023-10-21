@@ -8,6 +8,7 @@
 
 import UIKit
 
+import minimuxer
 import AltStoreCore
 import Roxas
 
@@ -264,7 +265,13 @@ private extension BrowseViewController
             previousProgress?.cancel()
             return
         }
-        
+
+        if !minimuxer.ready() {
+            let toastView = ToastView(error: MinimuxerError.NoConnection)
+            toastView.show(in: self)
+            return
+        }
+
         _ = AppManager.shared.install(app, presentingViewController: self) { (result) in
             DispatchQueue.main.async {
                 switch result

@@ -55,12 +55,7 @@ public extension Bundle
 
 public extension Bundle
 {
-    static var baseAltStoreAppGroupID = "com.SideStore.SideStore" // TODO: Define as a const elsewhere
-    /* I know naturecodevoid, Joe, and others wanted to change variables here to be consts elsewhere, but until
-       we do a big rewrite, I (ny) am going to keep this as this for the sake of time ;)
-
-       If you think you have a better fix, contribute!
-     */
+    static var baseAltStoreAppGroupID = "group." + Bundle.Info.appbundleIdentifier
 
     var appGroups: [String] {
         return self.infoDictionary?[Bundle.Info.appGroups] as? [String] ?? []

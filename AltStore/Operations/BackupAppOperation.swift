@@ -55,9 +55,8 @@ class BackupAppOperation: ResultOperation<Void>
                     let appName = installedApp.name
                     self.appName = appName
                     
-                    guard let altstoreApp = InstalledApp.fetchAltStore(in: context) else { throw OperationError.appNotFound }
-                    let altstoreOpenURL = altstoreApp.openAppURL
-                    
+                    let altstoreOpenURL = URL(string: "sidestore://")!
+
                     var returnURLComponents = URLComponents(url: altstoreOpenURL, resolvingAgainstBaseURL: false)
                     returnURLComponents?.host = "appBackupResponse"
                     guard let returnURL = returnURLComponents?.url else { throw OperationError.openAppFailed(name: appName) }

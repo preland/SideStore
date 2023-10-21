@@ -105,8 +105,13 @@ final class BackgroundRefreshAppsOperation: ResultOperation<[String: Result<Inst
         } catch {
             self.finish(.failure(error))
         }
-        start_auto_mounter(documentsDirectory)
-        
+        if #available(iOS 17, *) {
+            // TODO: iOS 17 and above have a new JIT implementation that is completely broken in SideStore :(
+        }
+        else {
+            start_auto_mounter(documentsDirectory)
+        }
+
         self.managedObjectContext.perform {
             print("Apps to refresh:", self.installedApps.map(\.bundleIdentifier))
             

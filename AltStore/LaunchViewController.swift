@@ -155,7 +155,12 @@ final class LaunchViewController: RSTLaunchViewController, UIDocumentPickerDeleg
             try! FileManager.default.removeItem(at: FileManager.default.documentsDirectory.appendingPathComponent("\(pairingFileName)"))
             displayError("minimuxer failed to start, please restart SideStore. \((error as? LocalizedError)?.failureReason ?? "UNKNOWN ERROR!!!!!! REPORT TO GITHUB ISSUES!")")
         }
-        start_auto_mounter(documentsDirectory)
+        if #available(iOS 17, *) {
+            // TODO: iOS 17 and above have a new JIT implementation that is completely broken in SideStore :(
+        }
+        else {
+            start_auto_mounter(documentsDirectory)
+        }
     }
 }
 
