@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03F06CD52942C27E001C4D68 /* Bundle+AltStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1E314122A05D4C00370A3C /* Bundle+AltStore.swift */; };
+		0E1A1F912AE36A9700364CAD /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E1A1F902AE36A9600364CAD /* bytearray.c */; };
 		0E764E172ADFF5740043DD4E /* AltBackup.ipa in Resources */ = {isa = PBXBuildFile; fileRef = 0E764E162ADFF5740043DD4E /* AltBackup.ipa */; };
 		0EA1665B2ADFE0D2003015C1 /* out-limd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166472ADFE0D1003015C1 /* out-limd.c */; };
 		0EA1665C2ADFE0D2003015C1 /* out-default.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166522ADFE0D2003015C1 /* out-default.c */; };
@@ -23,7 +24,6 @@
 		0EA1666F2ADFE140003015C1 /* hashtable.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA1664F2ADFE0D1003015C1 /* hashtable.c */; };
 		0EA166702ADFE140003015C1 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166502ADFE0D2003015C1 /* Node.cpp */; };
 		0EA166712ADFE140003015C1 /* Key.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166582ADFE0D2003015C1 /* Key.cpp */; };
-		0EA166722ADFE140003015C1 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA1664D2ADFE0D1003015C1 /* bytearray.c */; };
 		0EA166732ADFE140003015C1 /* Dictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166462ADFE0D1003015C1 /* Dictionary.cpp */; };
 		0EA166742ADFE140003015C1 /* Date.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166422ADFE0D1003015C1 /* Date.cpp */; };
 		0EA166752ADFE140003015C1 /* Real.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166542ADFE0D2003015C1 /* Real.cpp */; };
@@ -33,9 +33,9 @@
 		0EA166792ADFE140003015C1 /* bplist.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166442ADFE0D1003015C1 /* bplist.c */; };
 		0EA1667A2ADFE140003015C1 /* Uid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA1664B2ADFE0D1003015C1 /* Uid.cpp */; };
 		0EA1667B2ADFE140003015C1 /* Structure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EA1665A2ADFE0D2003015C1 /* Structure.cpp */; };
-		0EA1667C2ADFE140003015C1 /* plist.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166482ADFE0D1003015C1 /* plist.c */; };
 		0EA1667D2ADFE140003015C1 /* xplist.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA166592ADFE0D2003015C1 /* xplist.c */; };
 		0EA1667E2ADFE140003015C1 /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA1664C2ADFE0D1003015C1 /* time64.c */; };
+		0EA4B9BC2AE4A414009209CE /* plist.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA4B9BB2AE4A3F6009209CE /* plist.c */; };
 		19104D952909BAEA00C49C7B /* libimobiledevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF45872B2298D31600BD7491 /* libimobiledevice.a */; };
 		19104DB52909C06D00C49C7B /* EmotionalDamage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19104DB42909C06D00C49C7B /* EmotionalDamage.swift */; };
 		19104DBC2909C4E500C49C7B /* libEmotionalDamage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19104DB22909C06C00C49C7B /* libEmotionalDamage.a */; };
@@ -498,42 +498,42 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0E1A1F902AE36A9600364CAD /* bytearray.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = bytearray.c; path = src/bytearray.c; sourceTree = "<group>"; };
 		0E764E162ADFF5740043DD4E /* AltBackup.ipa */ = {isa = PBXFileReference; lastKnownFileType = file; name = AltBackup.ipa; path = AltStore/Resources/AltBackup.ipa; sourceTree = SOURCE_ROOT; };
-		0EA166412ADFE0D1003015C1 /* jplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jplist.c; path = Dependencies/libplist/jplist.c; sourceTree = SOURCE_ROOT; };
-		0EA166422ADFE0D1003015C1 /* Date.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Date.cpp; path = Dependencies/libplist/Date.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166432ADFE0D1003015C1 /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Data.cpp; path = Dependencies/libplist/Data.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166442ADFE0D1003015C1 /* bplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = bplist.c; path = Dependencies/libplist/bplist.c; sourceTree = SOURCE_ROOT; };
-		0EA166452ADFE0D1003015C1 /* Array.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Array.cpp; path = Dependencies/libplist/Array.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166462ADFE0D1003015C1 /* Dictionary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Dictionary.cpp; path = Dependencies/libplist/Dictionary.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166472ADFE0D1003015C1 /* out-limd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-limd.c"; path = "Dependencies/libplist/out-limd.c"; sourceTree = SOURCE_ROOT; };
-		0EA166482ADFE0D1003015C1 /* plist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = plist.c; path = Dependencies/libplist/plist.c; sourceTree = SOURCE_ROOT; };
-		0EA166492ADFE0D1003015C1 /* String.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = String.cpp; path = Dependencies/libplist/String.cpp; sourceTree = SOURCE_ROOT; };
-		0EA1664A2ADFE0D1003015C1 /* base64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = base64.c; path = Dependencies/libplist/base64.c; sourceTree = SOURCE_ROOT; };
-		0EA1664B2ADFE0D1003015C1 /* Uid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Uid.cpp; path = Dependencies/libplist/Uid.cpp; sourceTree = SOURCE_ROOT; };
-		0EA1664C2ADFE0D1003015C1 /* time64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = time64.c; path = Dependencies/libplist/time64.c; sourceTree = SOURCE_ROOT; };
-		0EA1664D2ADFE0D1003015C1 /* bytearray.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = bytearray.c; path = Dependencies/libplist/bytearray.c; sourceTree = SOURCE_ROOT; };
-		0EA1664E2ADFE0D1003015C1 /* Boolean.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Boolean.cpp; path = Dependencies/libplist/Boolean.cpp; sourceTree = SOURCE_ROOT; };
-		0EA1664F2ADFE0D1003015C1 /* hashtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = hashtable.c; path = Dependencies/libplist/hashtable.c; sourceTree = SOURCE_ROOT; };
-		0EA166502ADFE0D2003015C1 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = Dependencies/libplist/Node.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166512ADFE0D2003015C1 /* ptrarray.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ptrarray.c; path = Dependencies/libplist/ptrarray.c; sourceTree = SOURCE_ROOT; };
-		0EA166522ADFE0D2003015C1 /* out-default.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-default.c"; path = "Dependencies/libplist/out-default.c"; sourceTree = SOURCE_ROOT; };
-		0EA166532ADFE0D2003015C1 /* Integer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Integer.cpp; path = Dependencies/libplist/Integer.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166542ADFE0D2003015C1 /* Real.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Real.cpp; path = Dependencies/libplist/Real.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166552ADFE0D2003015C1 /* out-plutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-plutil.c"; path = "Dependencies/libplist/out-plutil.c"; sourceTree = SOURCE_ROOT; };
-		0EA166562ADFE0D2003015C1 /* oplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = oplist.c; path = Dependencies/libplist/oplist.c; sourceTree = SOURCE_ROOT; };
-		0EA166572ADFE0D2003015C1 /* jsmn.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jsmn.c; path = Dependencies/libplist/jsmn.c; sourceTree = SOURCE_ROOT; };
-		0EA166582ADFE0D2003015C1 /* Key.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Key.cpp; path = Dependencies/libplist/Key.cpp; sourceTree = SOURCE_ROOT; };
-		0EA166592ADFE0D2003015C1 /* xplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xplist.c; path = Dependencies/libplist/xplist.c; sourceTree = SOURCE_ROOT; };
-		0EA1665A2ADFE0D2003015C1 /* Structure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Structure.cpp; path = Dependencies/libplist/Structure.cpp; sourceTree = SOURCE_ROOT; };
-		0EA1665F2ADFE122003015C1 /* time64_limits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = time64_limits.h; path = Dependencies/libplist/time64_limits.h; sourceTree = SOURCE_ROOT; };
-		0EA166602ADFE122003015C1 /* time64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = time64.h; path = Dependencies/libplist/time64.h; sourceTree = SOURCE_ROOT; };
-		0EA166612ADFE122003015C1 /* bytearray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bytearray.h; path = Dependencies/libplist/bytearray.h; sourceTree = SOURCE_ROOT; };
-		0EA166622ADFE122003015C1 /* ptrarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ptrarray.h; path = Dependencies/libplist/ptrarray.h; sourceTree = SOURCE_ROOT; };
-		0EA166632ADFE122003015C1 /* jsmn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsmn.h; path = Dependencies/libplist/jsmn.h; sourceTree = SOURCE_ROOT; };
-		0EA166642ADFE122003015C1 /* plist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = plist.h; path = Dependencies/libplist/plist.h; sourceTree = SOURCE_ROOT; };
-		0EA166652ADFE122003015C1 /* hashtable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = Dependencies/libplist/hashtable.h; sourceTree = SOURCE_ROOT; };
-		0EA166662ADFE122003015C1 /* base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = base64.h; path = Dependencies/libplist/base64.h; sourceTree = SOURCE_ROOT; };
-		0EA166672ADFE122003015C1 /* strbuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = strbuf.h; path = Dependencies/libplist/strbuf.h; sourceTree = SOURCE_ROOT; };
+		0EA166412ADFE0D1003015C1 /* jplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jplist.c; path = Dependencies/libplist/src/jplist.c; sourceTree = SOURCE_ROOT; };
+		0EA166422ADFE0D1003015C1 /* Date.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Date.cpp; path = Dependencies/libplist/src/Date.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166432ADFE0D1003015C1 /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Data.cpp; path = Dependencies/libplist/src/Data.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166442ADFE0D1003015C1 /* bplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = bplist.c; path = Dependencies/libplist/src/bplist.c; sourceTree = SOURCE_ROOT; };
+		0EA166452ADFE0D1003015C1 /* Array.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Array.cpp; path = Dependencies/libplist/src/Array.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166462ADFE0D1003015C1 /* Dictionary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Dictionary.cpp; path = Dependencies/libplist/src/Dictionary.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166472ADFE0D1003015C1 /* out-limd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-limd.c"; path = "Dependencies/libplist/src/out-limd.c"; sourceTree = SOURCE_ROOT; };
+		0EA166492ADFE0D1003015C1 /* String.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = String.cpp; path = Dependencies/libplist/src/String.cpp; sourceTree = SOURCE_ROOT; };
+		0EA1664A2ADFE0D1003015C1 /* base64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = base64.c; path = Dependencies/libplist/src/base64.c; sourceTree = SOURCE_ROOT; };
+		0EA1664B2ADFE0D1003015C1 /* Uid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Uid.cpp; path = Dependencies/libplist/src/Uid.cpp; sourceTree = SOURCE_ROOT; };
+		0EA1664C2ADFE0D1003015C1 /* time64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = time64.c; path = Dependencies/libplist/src/time64.c; sourceTree = SOURCE_ROOT; };
+		0EA1664E2ADFE0D1003015C1 /* Boolean.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Boolean.cpp; path = Dependencies/libplist/src/Boolean.cpp; sourceTree = SOURCE_ROOT; };
+		0EA1664F2ADFE0D1003015C1 /* hashtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = hashtable.c; path = Dependencies/libplist/src/hashtable.c; sourceTree = SOURCE_ROOT; };
+		0EA166502ADFE0D2003015C1 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = Dependencies/libplist/src/Node.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166512ADFE0D2003015C1 /* ptrarray.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ptrarray.c; path = Dependencies/libplist/src/ptrarray.c; sourceTree = SOURCE_ROOT; };
+		0EA166522ADFE0D2003015C1 /* out-default.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-default.c"; path = "Dependencies/libplist/src/out-default.c"; sourceTree = SOURCE_ROOT; };
+		0EA166532ADFE0D2003015C1 /* Integer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Integer.cpp; path = Dependencies/libplist/src/Integer.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166542ADFE0D2003015C1 /* Real.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Real.cpp; path = Dependencies/libplist/src/Real.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166552ADFE0D2003015C1 /* out-plutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "out-plutil.c"; path = "Dependencies/libplist/src/out-plutil.c"; sourceTree = SOURCE_ROOT; };
+		0EA166562ADFE0D2003015C1 /* oplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = oplist.c; path = Dependencies/libplist/src/oplist.c; sourceTree = SOURCE_ROOT; };
+		0EA166572ADFE0D2003015C1 /* jsmn.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jsmn.c; path = Dependencies/libplist/src/jsmn.c; sourceTree = SOURCE_ROOT; };
+		0EA166582ADFE0D2003015C1 /* Key.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Key.cpp; path = Dependencies/libplist/src/Key.cpp; sourceTree = SOURCE_ROOT; };
+		0EA166592ADFE0D2003015C1 /* xplist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xplist.c; path = Dependencies/libplist/src/xplist.c; sourceTree = SOURCE_ROOT; };
+		0EA1665A2ADFE0D2003015C1 /* Structure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Structure.cpp; path = Dependencies/libplist/src/Structure.cpp; sourceTree = SOURCE_ROOT; };
+		0EA1665F2ADFE122003015C1 /* time64_limits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = time64_limits.h; path = Dependencies/libplist/src/time64_limits.h; sourceTree = SOURCE_ROOT; };
+		0EA166602ADFE122003015C1 /* time64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = time64.h; path = Dependencies/libplist/src/time64.h; sourceTree = SOURCE_ROOT; };
+		0EA166612ADFE122003015C1 /* bytearray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bytearray.h; path = Dependencies/libplist/src/bytearray.h; sourceTree = SOURCE_ROOT; };
+		0EA166622ADFE122003015C1 /* ptrarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ptrarray.h; path = Dependencies/libplist/src/ptrarray.h; sourceTree = SOURCE_ROOT; };
+		0EA166632ADFE122003015C1 /* jsmn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsmn.h; path = Dependencies/libplist/src/jsmn.h; sourceTree = SOURCE_ROOT; };
+		0EA166642ADFE122003015C1 /* plist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = plist.h; path = Dependencies/libplist/src/plist.h; sourceTree = SOURCE_ROOT; };
+		0EA166652ADFE122003015C1 /* hashtable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = Dependencies/libplist/src/hashtable.h; sourceTree = SOURCE_ROOT; };
+		0EA166662ADFE122003015C1 /* base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = base64.h; path = Dependencies/libplist/src/base64.h; sourceTree = SOURCE_ROOT; };
+		0EA166672ADFE122003015C1 /* strbuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = strbuf.h; path = Dependencies/libplist/src/strbuf.h; sourceTree = SOURCE_ROOT; };
+		0EA4B9BB2AE4A3F6009209CE /* plist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = plist.c; path = Dependencies/libplist/src/plist.c; sourceTree = SOURCE_ROOT; };
 		19104DB22909C06C00C49C7B /* libEmotionalDamage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEmotionalDamage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		19104DB42909C06D00C49C7B /* EmotionalDamage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionalDamage.swift; sourceTree = "<group>"; };
 		191E5FAB290A5D92001A3B7C /* libminimuxer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libminimuxer.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1192,8 +1192,8 @@
 			isa = PBXGroup;
 			children = (
 				0EA166462ADFE0D1003015C1 /* Dictionary.cpp */,
+				0E1A1F902AE36A9600364CAD /* bytearray.c */,
 				0EA166442ADFE0D1003015C1 /* bplist.c */,
-				0EA1664D2ADFE0D1003015C1 /* bytearray.c */,
 				0EA166432ADFE0D1003015C1 /* Data.cpp */,
 				0EA166422ADFE0D1003015C1 /* Date.cpp */,
 				0EA1664F2ADFE0D1003015C1 /* hashtable.c */,
@@ -1208,12 +1208,12 @@
 				0EA1664A2ADFE0D1003015C1 /* base64.c */,
 				0EA166572ADFE0D2003015C1 /* jsmn.c */,
 				0EA1664E2ADFE0D1003015C1 /* Boolean.cpp */,
+				0EA4B9BB2AE4A3F6009209CE /* plist.c */,
 				0EA166412ADFE0D1003015C1 /* jplist.c */,
 				0EA166582ADFE0D2003015C1 /* Key.cpp */,
 				0EA166512ADFE0D2003015C1 /* ptrarray.c */,
 				0EA1664C2ADFE0D1003015C1 /* time64.c */,
 				0EA166502ADFE0D2003015C1 /* Node.cpp */,
-				0EA166482ADFE0D1003015C1 /* plist.c */,
 				0EA166542ADFE0D2003015C1 /* Real.cpp */,
 				0EA1664B2ADFE0D1003015C1 /* Uid.cpp */,
 				0EA166592ADFE0D2003015C1 /* xplist.c */,
@@ -2288,10 +2288,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E1A1F912AE36A9700364CAD /* bytearray.c in Sources */,
 				0EA1666E2ADFE140003015C1 /* ptrarray.c in Sources */,
 				0EA1665B2ADFE0D2003015C1 /* out-limd.c in Sources */,
 				0EA166742ADFE140003015C1 /* Date.cpp in Sources */,
-				0EA166722ADFE140003015C1 /* bytearray.c in Sources */,
 				0EA166712ADFE140003015C1 /* Key.cpp in Sources */,
 				0EA1665C2ADFE0D2003015C1 /* out-default.c in Sources */,
 				0EA1666A2ADFE140003015C1 /* String.cpp in Sources */,
@@ -2305,7 +2305,6 @@
 				BF45881B2298D3AB00BD7491 /* house_arrest.c in Sources */,
 				0EA1666F2ADFE140003015C1 /* hashtable.c in Sources */,
 				BF4588232298D3AB00BD7491 /* mobilesync.c in Sources */,
-				0EA1667C2ADFE140003015C1 /* plist.c in Sources */,
 				BF4588072298D3AB00BD7491 /* afc.c in Sources */,
 				BF4588082298D3AB00BD7491 /* mobile_image_mounter.c in Sources */,
 				BF4588022298D3AB00BD7491 /* file_relay.c in Sources */,
@@ -2355,6 +2354,7 @@
 				BF4588262298D3AB00BD7491 /* lockdown.c in Sources */,
 				BFD52C2222A1A9EC000B7ED1 /* cnary.c in Sources */,
 				BF45880C2298D3AB00BD7491 /* mobilebackup2.c in Sources */,
+				0EA4B9BC2AE4A414009209CE /* plist.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
