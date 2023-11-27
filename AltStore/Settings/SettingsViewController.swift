@@ -53,9 +53,11 @@ extension SettingsViewController
         case sendFeedback
         case refreshAttempts
         case errorLog
+        case clearCache
         case resetPairingFile
         case resetAdiPb
         case advancedSettings
+    
     }
 }
 
@@ -291,6 +293,39 @@ private extension SettingsViewController
         self.present(viewController, animated: true, completion: nil)
     }
     
+    func clearCache()
+    {
+        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to clear SideStore's cache?", comment: ""),
+                                                message: NSLocalizedString("This will remove all temporary files as well as backups for uninstalled apps.", comment: ""),
+                                                preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: UIAlertAction.cancel.title, style: UIAlertAction.cancel.style) { [weak self] _ in
+            self?.tableView.indexPathForSelectedRow.map { self?.tableView.deselectRow(at: $0, animated: true) }
+        })
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Clear Cache", comment: ""), style: .destructive) { [weak self] _ in
+            AppManager.shared.clearAppCache { result in
+                DispatchQueue.main.async {
+                    self?.tableView.indexPathForSelectedRow.map { self?.tableView.deselectRow(at: $0, animated: true) }
+                    
+                    switch result
+                    {
+                    case .success: break
+                    case .failure(let error):
+                        let alertController = UIAlertController(title: NSLocalizedString("Unable to Clear Cache", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                        alertController.addAction(.ok)
+                        self?.present(alertController, animated: true)
+                    }
+                }
+            }
+        })
+        
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+        }
+        
+        self.present(alertController, animated: true)
+    }
+    
     @IBAction func handleDebugModeGesture(_ gestureRecognizer: UISwipeGestureRecognizer)
     {
         self.debugGestureCounter += 1
@@ -470,6 +505,7 @@ extension SettingsViewController
                 self.addRefreshAppsShortcut()
             }
             
+            
         case .credits:
             let row = CreditsRow.allCases[indexPath.row]
             switch row
@@ -507,6 +543,9 @@ extension SettingsViewController
                     let toastView = ToastView(text: NSLocalizedString("Cannot Send Mail", comment: ""), detailText: nil)
                     toastView.show(in: self)
                 }
+                
+            case .clearCache: self.clearCache()
+
             case .resetPairingFile:
                 let filename = "ALTPairingFile.mobiledevicepairing"
                 let fm = FileManager.default
@@ -559,6 +598,7 @@ extension SettingsViewController
                     ELOG("UIApplication.openSettingsURLString invalid")
                 }
             case .refreshAttempts, .errorLog: break
+
             }
             
         default: break

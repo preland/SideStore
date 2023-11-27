@@ -91,13 +91,18 @@ private extension AppIDsViewController
                 
                 cell.bannerView.buttonLabel.isHidden = false
                 
-                let currentDate = Date()
+                let formatter = DateComponentsFormatter()
+                formatter.unitsStyle = .full
+                formatter.includesApproximationPhrase = false
+                formatter.includesTimeRemainingPhrase = false
+                formatter.allowedUnits = [.minute, .hour, .day]
+                formatter.maximumUnitCount = 1
                 
-                let numberOfDays = expirationDate.numberOfCalendarDays(since: currentDate)
-                let numberOfDaysText = (numberOfDays == 1) ? NSLocalizedString("1 day", comment: "") : String(format: NSLocalizedString("%@ days", comment: ""), NSNumber(value: numberOfDays))
-                cell.bannerView.button.setTitle(numberOfDaysText.uppercased(), for: .normal)
+                cell.bannerView.button.setTitle(formatter.string(from: Date(), to: expirationDate)?.uppercased(), for: .normal)
                 
-                attributedAccessibilityLabel.mutableString.append(String(format: NSLocalizedString("Expires in %@.", comment: ""), numberOfDaysText) + " ")
+                formatter.includesTimeRemainingPhrase = true
+                
+                attributedAccessibilityLabel.mutableString.append((formatter.string(from: Date(), to: expirationDate) ?? NSLocalizedString("Unknown", comment: "")) + " ")
             }
             else
             {
@@ -206,7 +211,7 @@ extension AppIDsViewController: UICollectionViewDelegateFlowLayout
                 **App IDs can't be deleted**, but they do expire after one week. SideStore will automatically renew App IDs for all active apps once they've expired.
                 """, comment: "")
                 
-                let attributedText = NSAttributedString(markdownRepresentation: text, attributes: [.font: headerView.textLabel.font as Any])
+                let attributedText = NSAttributedString(markdownRepresentation: text)
                 headerView.textLabel.attributedText = attributedText
             }
             else
